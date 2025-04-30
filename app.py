@@ -340,74 +340,19 @@ compare_button=st.button("Compare" if fighter1_url and fighter2_url else "Presen
 
 # _________Display results_________
 if compare_button:
-#     # Get data 
-#     try:
-#         df_tapology_1,fighter_info_1,df_fightmatrix_1,df_ranking_history_1 = dict_url_to_df[fighter1_url][0],dict_url_to_df[fighter1_url][1],dict_url_to_df[fighter1_url][3],dict_url_to_df[fighter1_url][4]
-#     except:
-#         df_tapology_1,fighter_info_1,df_fightmatrix_1,df_ranking_history_1 =retrieve_all_data(fighter1_url)
-#         dict_url_to_df[fighter1_url] = [df_tapology_1.copy(),fighter_info_1.copy(),df_fightmatrix_1.copy(),df_ranking_history_1.copy()]
-#     try:
-#         df_tapology_2,fighter_info_2,df_fightmatrix_2,df_ranking_history_2 = dict_url_to_df[fighter2_url][0],dict_url_to_df[fighter2_url][1],dict_url_to_df[fighter2_url][3],dict_url_to_df[fighter2_url][4]
-#     except:
-#         df_tapology_2,fighter_info_2,df_fightmatrix_2,df_ranking_history_2 =retrieve_all_data(fighter2_url)
-#         dict_url_to_df[fighter2_url] =[df_tapology_2.copy(),fighter_info_2.copy(),df_fightmatrix_2.copy(),df_ranking_history_2.copy()]
+    # Get data 
+    try:
+        df_tapology_1,fighter_info_1,df_fightmatrix_1,df_ranking_history_1 = dict_url_to_df[fighter1_url][0],dict_url_to_df[fighter1_url][1],dict_url_to_df[fighter1_url][3],dict_url_to_df[fighter1_url][4]
+    except:
+        df_tapology_1,fighter_info_1,df_fightmatrix_1,df_ranking_history_1 =retrieve_all_data(fighter1_url)
+        dict_url_to_df[fighter1_url] = [df_tapology_1.copy(),fighter_info_1.copy(),df_fightmatrix_1.copy(),df_ranking_history_1.copy()]
+    try:
+        df_tapology_2,fighter_info_2,df_fightmatrix_2,df_ranking_history_2 = dict_url_to_df[fighter2_url][0],dict_url_to_df[fighter2_url][1],dict_url_to_df[fighter2_url][3],dict_url_to_df[fighter2_url][4]
+    except:
+        df_tapology_2,fighter_info_2,df_fightmatrix_2,df_ranking_history_2 =retrieve_all_data(fighter2_url)
+        dict_url_to_df[fighter2_url] =[df_tapology_2.copy(),fighter_info_2.copy(),df_fightmatrix_2.copy(),df_ranking_history_2.copy()]
 
-#     #TEMPORARY FOR LOCAL USE
-    import pickle
 
-#     with open('soup_df_tapology_1.pkl', 'wb') as f:
-#         pickle.dump(df_tapology_1, f)
-    
-#     with open('soup_fighter_info_1.pkl', 'wb') as f:
-#         pickle.dump(fighter_info_1, f)
-    
-#     with open('soup_df_fightmatrix_1.pkl', 'wb') as f:
-#         pickle.dump(df_fightmatrix_1, f)
-
-#     with open('soup_df_ranking_history_1.pkl', 'wb') as f:
-#         pickle.dump(df_ranking_history_1, f)
-
-# # ----- 2
-#     with open('soup_df_tapology_2.pkl', 'wb') as f:
-#         pickle.dump(df_tapology_2, f)
-    
-#     with open('soup_fighter_info_2.pkl', 'wb') as f:
-#         pickle.dump(fighter_info_2, f)
-    
-#     with open('soup_df_fightmatrix_2.pkl', 'wb') as f:
-#         pickle.dump(df_fightmatrix_2, f)
-
-#     with open('soup_df_ranking_history_2.pkl', 'wb') as f:
-#         pickle.dump(df_ranking_history_2, f)
-
-# --- load
-
-    with open('soup_df_tapology_1.pkl', 'rb') as f:
-        df_tapology_1 = pickle.load(f)
-    
-    with open('soup_fighter_info_1.pkl', 'rb') as f:
-        fighter_info_1 = pickle.load(f)
-
-    with open('soup_df_fightmatrix_1.pkl', 'rb') as f:
-        df_fightmatrix_1 = pickle.load(f)
-
-    with open('soup_df_ranking_history_1.pkl', 'rb') as f:
-        df_ranking_history_1 = pickle.load(f)
-
-# ----- 2
-    with open('soup_df_tapology_2.pkl', 'rb') as f:
-        df_tapology_2 = pickle.load(f)
-    
-    with open('soup_fighter_info_2.pkl', 'rb') as f:
-        fighter_info_2 = pickle.load(f)
-    
-    with open('soup_df_fightmatrix_2.pkl', 'rb') as f:
-        df_fightmatrix_2 = pickle.load(f)
-
-    with open('soup_df_ranking_history_2.pkl', 'rb') as f:
-        df_ranking_history_2 = pickle.load(f)
-
-# END TEMP
 
     # Cleaning dataframe
     def Df_cleaning(df_ranking_history,fighter_info,df_tapology,df_fightmatrix):
@@ -419,12 +364,6 @@ if compare_button:
     
     df_fights_1 = Df_cleaning(df_ranking_history_1,fighter_info_1,df_tapology_1,df_fightmatrix_1)
     df_fights_2 = Df_cleaning(df_ranking_history_2,fighter_info_2,df_tapology_2,df_fightmatrix_2)
-
-
-    st.dataframe(df_tapology_1) #Temp
-    st.dataframe(df_fightmatrix_1)#Temp
-    st.dataframe(df_fights_1) #Temp
-    st.dataframe(df_ranking_history_1) # TEMP
 
 
 
@@ -646,9 +585,3 @@ if compare_button:
     
     graph_opp_cumul_record = Graph_Opponent_cumulated_Record()
     st.plotly_chart(graph_opp_cumul_record, use_container_width=True)
-
-
-    #TEMP affiche les dataframes pour une meilleure lecture pendant la rédaction du code
-    st.dataframe(df_fights)
-    st.dataframe(df_ranking_history)
-    st.dataframe(fighter_info_1)
