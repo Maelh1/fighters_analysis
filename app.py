@@ -7,6 +7,7 @@ import re
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 
 # Get tapology URL and soup_fightmatrix
@@ -75,16 +76,16 @@ def retrieve_tapology_fights(soup_tapology):
 
         
         result=fight.find("div",class_= lambda x:x in ["div w-[28px] md:w-[32px] flex shrink-0 items-center justify-center text-white text-opacity-60 text-lg leading-none font-extrabold h-full rounded-l-sm bg-[#29b829] opacity-90","div w-[28px] md:w-[32px] flex shrink-0 items-center justify-center text-white text-opacity-60 text-lg leading-none font-extrabold h-full rounded-l-sm bg-[#c1320c] opacity-90"])
-        result_list.append(result.text if result else np.nan)
+        result_list.append(result.text if result else np.NaN)
 
         outcome=fight.find("div",class_=lambda x: x in ["div text-[#29b829] -rotate-90", "div text-[#c1320c] -rotate-90"])
-        outcome_list.append(outcome.text if outcome else np.nan)
+        outcome_list.append(outcome.text if outcome else np.NaN)
 
         name=fight.find("a",attrs={"class":"border-b border-dotted border-tap_6 hover:border-solid"})
-        name_list.append(name.text if name else np.nan)
+        name_list.append(name.text if name else np.NaN)
 
         opp_record=fight.find("span",attrs={"class":"cursor-zoom-in","title":"Opponent Record Before Fight"})
-        opp_record_list.append(opp_record.text if opp_record else np.nan) 
+        opp_record_list.append(opp_record.text if opp_record else np.NaN) 
 
         if opp_record and opp_record.text != "N/A":
             opp_record_split=opp_record.text.split('-')  # Split le record en liste pour pouvoir distinguer win, lose, draw: X-Y-Z ->[X,Y,Z]
@@ -92,7 +93,7 @@ def retrieve_tapology_fights(soup_tapology):
             opp_lose_list.append(int(opp_record_split[1]))
             opp_draw_list.append(int(opp_record_split[2]) if len(opp_record_split)==3 else 0)
         else:
-            opp_record_split=[np.nan,np.nan,np.nan] # Prends en compte le cas où aucun record n'est affiché pour l'adversaire (Pas de page tapology, autre art martial,...)
+            opp_record_split=[np.NaN,np.NaN,np.NaN] # Prends en compte le cas où aucun record n'est affiché pour l'adversaire (Pas de page tapology, autre art martial,...)
             opp_win_list.append(opp_record_split[0])
             opp_lose_list.append(opp_record_split[1])
             opp_draw_list.append(opp_record_split[2]) 
@@ -101,7 +102,7 @@ def retrieve_tapology_fights(soup_tapology):
 
 
         record=fight.find("span",attrs={"class":"cursor-zoom-in","title":"Fighter Record Before Fight"})
-        record_list.append(record.text if record else np.nan)
+        record_list.append(record.text if record else np.NaN)
         
         if record and record.text != 'N/A':
             record_split=record.text.split('-')  # Split le record en liste pour pouvoir distinguer win, lose, draw: X-Y-Z ->[X,Y,Z]
@@ -109,18 +110,18 @@ def retrieve_tapology_fights(soup_tapology):
             lose_list.append(int(record_split[1]))
             draw_list.append(int(record_split[2]) if len(record_split)==3 else 0) 
         else:
-            record_split=[np.nan,np.nan,np.nan] # Prends en compte le cas où aucun record n'est affiché pour l'adversaire (Pas de page tapology, autre art martial,...)
+            record_split=[np.NaN,np.NaN,np.NaN] # Prends en compte le cas où aucun record n'est affiché pour l'adversaire (Pas de page tapology, autre art martial,...)
             win_list.append(record_split[0])
             lose_list.append(record_split[1])
             draw_list.append(record_split[2]) 
 
 
         details=fight.find("div",class_="div text-tap_3 text-[13px] leading-[16px]")
-        detail= details.text.replace("\n","") if details else np.nan
+        detail= details.text.replace("\n","") if details else np.NaN
         details_list.append(detail)
 
         year=fight.find("span",class_="text-[13px] md:text-xs text-tap_3 font-bold")
-        year_list.append(year.text if year else np.nan)
+        year_list.append(year.text if year else np.NaN)
 
         month_to_number_dict = {"Jan": "1 ","Feb": "2 ","Mar": "3 ","Apr":  "4 ","May": "5 ","Jun":  "6 ","Jul":  "7 ","Aug":  "8 ","Sep":  "9 ","Oct":  "10 ","Nov":  "11 ","Dec":  "12 "}
         date=fight.find("span",class_="text-xs11 text-neutral-600")
@@ -128,11 +129,11 @@ def retrieve_tapology_fights(soup_tapology):
             date_split=date.text.split()
             date_split[0]=month_to_number_dict[date_split[0]]
             date="".join(date_split)
-        date_list.append(date if date else np.nan)
+        date_list.append(date if date else np.NaN)
 
 
         org_img = fight.find('img', class_='opacity-70')
-        organization_list.append(org_img['alt'] if org_img and 'alt' in org_img.attrs else np.nan)
+        organization_list.append(org_img['alt'] if org_img and 'alt' in org_img.attrs else np.NaN)
 
         art=fight.find("span",class_="hidden md:block text-tap_gold")
         art_list.append(art.text if art else "MMA")
@@ -169,7 +170,7 @@ def retrieve_fighter_info(soup_tapology,soup_fightmatrix):
 
     today=datetime.now()
     fighter_birthday = soup_tapology.find("span", attrs={"data-controller":"age-calc"})
-    fighter_birthday = fighter_birthday.text if fighter_birthday else np.nan
+    fighter_birthday = fighter_birthday.text if fighter_birthday else np.NaN
     fighter_birthday = datetime.strptime(str(fighter_birthday), '%Y-%m-%d')
     fighter_info["Birthday"] = fighter_birthday
 
@@ -188,19 +189,19 @@ def retrieve_fighter_info(soup_tapology,soup_fightmatrix):
     fighter_info["Last 5"]=last_5
 
     ranking=soup_fightmatrix.find("a",title="view the divisional ranking")
-    ranking=ranking.text if ranking else np.nan
+    ranking=ranking.text if ranking else np.NaN
     fighter_info["Ranking"]=ranking
 
     finish_perc_div=soup_fightmatrix.find_all(string=re.compile('Win Finish %: '))
     finish_perc_div = [i.parent for i in finish_perc_div]
     finish_perc=finish_perc_div[0].find("strong")
-    finish_perc=finish_perc.text if finish_perc else np.nan
+    finish_perc=finish_perc.text if finish_perc else np.NaN
     fighter_info["Finish %"]=finish_perc
 
     streak_div=soup_tapology.find("strong",string="Current MMA Streak:")
     streak_div=streak_div.parent
     streak=streak_div.find("span")
-    streak=streak.text if streak else np.nan
+    streak=streak.text if streak else np.NaN
     fighter_info["Streak"]=streak
 
 
@@ -217,10 +218,10 @@ def retrieve_fightmatrix_fights(soup_fightmatrix):
 
     for fight in fights_div:
         opponent_name = fight.find("a",class_="sherLink")
-        opponent_name_list.append(opponent_name.text if opponent_name else np.nan)
+        opponent_name_list.append(opponent_name.text if opponent_name else np.NaN)
 
         opponent_ranking = fight.find("em")
-        opponent_ranking_list.append(opponent_ranking.text if opponent_ranking else np.nan)
+        opponent_ranking_list.append(opponent_ranking.text if opponent_ranking else np.NaN)
 
 
     fights_div = soup_body.find_all("td",class_=lambda x: x and ("tdRank" in x),attrs={"style":"text-align: left; padding-top: 5px; padding-left: 2px; padding-right: 2px; padding-bottom: 5px;"})
@@ -229,7 +230,7 @@ def retrieve_fightmatrix_fights(soup_fightmatrix):
 
         if fight.find("a",class_="sherLink"):
             date=fight.find("em")
-            date_list.append(date.text.split(",")[1].strip().replace("1st", "1").replace("2nd", "2").replace("3rd", "3").replace("th", "") if date else np.nan)
+            date_list.append(date.text.split(",")[1].strip().replace("1st", "1").replace("2nd", "2").replace("3rd", "3").replace("th", "") if date else np.NaN)
 
     fights_dict = {"Opponent Name": opponent_name_list, "Opponent Ranking":opponent_ranking_list, "Date": date_list}
     df_fightmatrix = pd.DataFrame.from_dict(fights_dict)
@@ -257,10 +258,10 @@ def retrieve_fightmatrix_rankings(soup_fightmatrix):
         if rank.find("a",class_="sherLink"):
 
             date = rank.find("a",class_= "sherLink")
-            date_list.append(date.text if date else np.nan)
+            date_list.append(date.text if date else np.NaN)
 
             ranking=rank.find("td",string=lambda x:x and "#" in x)
-            rank_list.append(ranking.text if ranking else np.nan)
+            rank_list.append(ranking.text if ranking else np.NaN)
 
     ranking_dict={"Date": date_list,"Ranking":rank_list}
     df_ranking_history=pd.DataFrame.from_dict(ranking_dict)
@@ -302,7 +303,8 @@ def fights_analysis(func_fights_df,func_ranking_history_df):
 # _________________________ DATA VISUALISATION STREAMLIT _________________________
 
 # __________Header__________
-st.set_page_config(page_title='Fighters comparison',  layout='wide', page_icon=':chart_with_upwards_trend:')
+
+st.set_page_config(page_title='Fighters comparison', layout='centered', page_icon=':chart_with_upwards_trend:')
 
 #Fighter selection
 left_col,right_col =st.columns(2)
@@ -336,19 +338,74 @@ compare_button=st.button("Compare" if fighter1_url and fighter2_url else "Presen
 
 # _________Display results_________
 if compare_button:
-    # Get data 
-    try:
-        df_tapology_1,fighter_info_1,df_fightmatrix_1,df_ranking_history_1 = dict_url_to_df[fighter1_url][0],dict_url_to_df[fighter1_url][1],dict_url_to_df[fighter1_url][3],dict_url_to_df[fighter1_url][4]
-    except:
-        df_tapology_1,fighter_info_1,df_fightmatrix_1,df_ranking_history_1 =retrieve_all_data(fighter1_url)
-        dict_url_to_df[fighter1_url] = [df_tapology_1.copy(),fighter_info_1.copy(),df_fightmatrix_1.copy(),df_ranking_history_1.copy()]
-    try:
-        df_tapology_2,fighter_info_2,df_fightmatrix_2,df_ranking_history_2 = dict_url_to_df[fighter2_url][0],dict_url_to_df[fighter2_url][1],dict_url_to_df[fighter2_url][3],dict_url_to_df[fighter2_url][4]
-    except:
-        df_tapology_2,fighter_info_2,df_fightmatrix_2,df_ranking_history_2 =retrieve_all_data(fighter2_url)
-        dict_url_to_df[fighter2_url] =[df_tapology_2.copy(),fighter_info_2.copy(),df_fightmatrix_2.copy(),df_ranking_history_2.copy()]
+#     # Get data 
+#     try:
+#         df_tapology_1,fighter_info_1,df_fightmatrix_1,df_ranking_history_1 = dict_url_to_df[fighter1_url][0],dict_url_to_df[fighter1_url][1],dict_url_to_df[fighter1_url][3],dict_url_to_df[fighter1_url][4]
+#     except:
+#         df_tapology_1,fighter_info_1,df_fightmatrix_1,df_ranking_history_1 =retrieve_all_data(fighter1_url)
+#         dict_url_to_df[fighter1_url] = [df_tapology_1.copy(),fighter_info_1.copy(),df_fightmatrix_1.copy(),df_ranking_history_1.copy()]
+#     try:
+#         df_tapology_2,fighter_info_2,df_fightmatrix_2,df_ranking_history_2 = dict_url_to_df[fighter2_url][0],dict_url_to_df[fighter2_url][1],dict_url_to_df[fighter2_url][3],dict_url_to_df[fighter2_url][4]
+#     except:
+#         df_tapology_2,fighter_info_2,df_fightmatrix_2,df_ranking_history_2 =retrieve_all_data(fighter2_url)
+#         dict_url_to_df[fighter2_url] =[df_tapology_2.copy(),fighter_info_2.copy(),df_fightmatrix_2.copy(),df_ranking_history_2.copy()]
 
+#     #TEMPORARY FOR LOCAL USE
+    import pickle
 
+#     with open('soup_df_tapology_1.pkl', 'wb') as f:
+#         pickle.dump(df_tapology_1, f)
+    
+#     with open('soup_fighter_info_1.pkl', 'wb') as f:
+#         pickle.dump(fighter_info_1, f)
+    
+#     with open('soup_df_fightmatrix_1.pkl', 'wb') as f:
+#         pickle.dump(df_fightmatrix_1, f)
+
+#     with open('soup_df_ranking_history_1.pkl', 'wb') as f:
+#         pickle.dump(df_ranking_history_1, f)
+
+# # ----- 2
+#     with open('soup_df_tapology_2.pkl', 'wb') as f:
+#         pickle.dump(df_tapology_2, f)
+    
+#     with open('soup_fighter_info_2.pkl', 'wb') as f:
+#         pickle.dump(fighter_info_2, f)
+    
+#     with open('soup_df_fightmatrix_2.pkl', 'wb') as f:
+#         pickle.dump(df_fightmatrix_2, f)
+
+#     with open('soup_df_ranking_history_2.pkl', 'wb') as f:
+#         pickle.dump(df_ranking_history_2, f)
+
+# --- load
+
+    with open('soup_df_tapology_1.pkl', 'rb') as f:
+        df_tapology_1 = pickle.load(f)
+    
+    with open('soup_fighter_info_1.pkl', 'rb') as f:
+        fighter_info_1 = pickle.load(f)
+
+    with open('soup_df_fightmatrix_1.pkl', 'rb') as f:
+        df_fightmatrix_1 = pickle.load(f)
+
+    with open('soup_df_ranking_history_1.pkl', 'rb') as f:
+        df_ranking_history_1 = pickle.load(f)
+
+# ----- 2
+    with open('soup_df_tapology_2.pkl', 'rb') as f:
+        df_tapology_2 = pickle.load(f)
+    
+    with open('soup_fighter_info_2.pkl', 'rb') as f:
+        fighter_info_2 = pickle.load(f)
+    
+    with open('soup_df_fightmatrix_2.pkl', 'rb') as f:
+        df_fightmatrix_2 = pickle.load(f)
+
+    with open('soup_df_ranking_history_2.pkl', 'rb') as f:
+        df_ranking_history_2 = pickle.load(f)
+
+# END TEMP
 
     # Cleaning dataframe
     def Df_cleaning(df_ranking_history,fighter_info,df_tapology,df_fightmatrix):
@@ -356,10 +413,16 @@ if compare_button:
         df_tapology=df_tapology.loc[df_tapology["Art"]=="MMA"]
         df_fights=pd.merge(df_tapology, df_fightmatrix,how="right",on = 'Date')
         df_fights["Fighter Name"] = fighter_info["Name"]
-        return df_fights
+        return df_fights, df_tapology
     
-    df_fights_1 = Df_cleaning(df_ranking_history_1,fighter_info_1,df_tapology_1,df_fightmatrix_1)
-    df_fights_2 = Df_cleaning(df_ranking_history_2,fighter_info_2,df_tapology_2,df_fightmatrix_2)
+    df_fights_1, df_tapology_1 = Df_cleaning(df_ranking_history_1,fighter_info_1,df_tapology_1,df_fightmatrix_1)
+    df_fights_2, df_tapology_2 = Df_cleaning(df_ranking_history_2,fighter_info_2,df_tapology_2,df_fightmatrix_2)
+
+
+    # st.dataframe(df_tapology_1) #Temp
+    # st.dataframe(df_fightmatrix_1)#Temp
+    # st.dataframe(df_fights_1) #Temp
+    # st.dataframe(df_ranking_history_1) # TEMP
 
 
 
@@ -367,12 +430,12 @@ if compare_button:
     df_fights = pd.concat([df_fights_1,df_fights_2],ignore_index=True)
 
     df_fights=df_fights.loc[df_fights["Art"]=="MMA"] # Select only MMA fights
-
+    df_tapology = pd.concat([df_tapology_1,df_tapology_2],ignore_index = True)
   
     #_________Présentation_________
     # Colonnes pour les images uniquement
     def Presentation(fighter_info_1,fighter_info_2,df_fights_1,df_fights_2,df_ranking_history_1,df_ranking_history_2):
-        left_img_col, center_space, right_img_col = st.columns([0.4, 0.2, 0.4])
+        left_img_col, right_img_col = st.columns([0.2, 0.2],gap="large",vertical_alignment= "bottom",border = True)
 
         with left_img_col:
             st.image(fighter_info_1["Picture"], use_container_width=True)
@@ -383,6 +446,19 @@ if compare_button:
         # Préparation des données
         streak_emojis_f1 = ''.join(['🟢' if i == 'W' else '🔴' if i == 'L' else '⚪' if i == 'D' else '❓' for i in fighter_info_1['Last 5']])
         streak_emojis_f2 = ''.join(['🟢' if i == 'W' else '🔴' if i == 'L' else '⚪' if i == 'D' else '❓' for i in fighter_info_2['Last 5']])
+
+        def Opponent_Cumulated_Record(df_tapology):
+            df_tapology = df_tapology[df_tapology['Result'].isin( ['W','L','D'])]
+            wins = int(df_tapology["Opponent Win"].sum())
+            loss = int(df_tapology["Opponent Lose"].sum())
+            draws = int(df_tapology["Opponent draw"].sum())
+            record = f"{wins}-{loss}-{draws}"
+            win_rate = round(wins/(wins+loss+draws)*100,1)
+            win_rate = f"({win_rate}%)"
+            return record, win_rate
+        
+        f1_opp_cumul_record, f1_opp_winrate = Opponent_Cumulated_Record(df_tapology_1)
+        f2_opp_cumul_record, f2_opp_winrate = Opponent_Cumulated_Record(df_tapology_2)
 
         # Création du tableau pour le reste des données
         html_table = f"""
@@ -452,15 +528,186 @@ if compare_button:
                 <td class="header">Ranking</td>
                 <td>{df_ranking_history_2['Ranking'][0]}</td>
             </tr>
+            <tr><td colspan="3" class="divider"></td></tr>
+            <tr>
+                <td>{f1_opp_cumul_record} <BR> {f1_opp_winrate}</td>
+                <td class="header">Opponents cumulated record <BR> (% Win) </td>
+                <td>{f2_opp_cumul_record} <BR> {f2_opp_winrate}</td>
+            </tr>
         </table>
         """
         return html_table
     
     html_table = Presentation(fighter_info_1,fighter_info_2,df_fights_1,df_fights_2,df_ranking_history_1,df_ranking_history_2)
+
     # Afficher le tableau HTML
     st.markdown(html_table, unsafe_allow_html=True)
 
     #_________GRAPHS_________
+
+    # Fighters Win methods proportions
+    def create_victory_defeat_pie_charts(df_tapology1, df_tapology2,df_fight1,df_fight2):
+        fighter1_name = df_fight1["Fighter Name"].unique()[0]
+        fighter2_name = df_fight2["Fighter Name"].unique()[0]
+
+        # Créer une figure avec 2x2 sous-graphiques
+        fig = make_subplots(
+            rows=2, cols=2,
+            specs=[[{'type': 'pie'}, {'type': 'pie'}],
+                [{'type': 'pie'}, {'type': 'pie'}]],
+            subplot_titles=(
+                f"{fighter1_name} Victories", 
+                f"{fighter2_name} Victories",
+                f"{fighter1_name} Defeats", 
+                f"{fighter2_name} Defeats"
+            )
+        )
+        
+        # Filtrer les données pour les victoires et défaites de chaque combattant
+        wins_f1 = df_tapology1[df_tapology1['Result'] == 'W']
+        losses_f1 = df_tapology1[df_tapology1['Result'] == 'L']
+        wins_f2 = df_tapology2[df_tapology2['Result'] == 'W']
+        losses_f2 = df_tapology2[df_tapology2['Result'] == 'L']
+        
+        # Compter les méthodes de victoire pour fighter1
+        win_methods_f1 = wins_f1['Outcome'].value_counts()
+        win_methods_f1_labels = win_methods_f1.index.tolist()
+        win_methods_f1_values = win_methods_f1.values.tolist()
+        
+        # Compter les méthodes de défaite pour fighter1
+        loss_methods_f1 = losses_f1['Outcome'].value_counts()
+        loss_methods_f1_labels = loss_methods_f1.index.tolist()
+        loss_methods_f1_values = loss_methods_f1.values.tolist()
+        
+        # Compter les méthodes de victoire pour fighter2
+        win_methods_f2 = wins_f2['Outcome'].value_counts()
+        win_methods_f2_labels = win_methods_f2.index.tolist()
+        win_methods_f2_values = win_methods_f2.values.tolist()
+        
+        # Compter les méthodes de défaite pour fighter2
+        loss_methods_f2 = losses_f2['Outcome'].value_counts()
+        loss_methods_f2_labels = loss_methods_f2.index.tolist()
+        loss_methods_f2_values = loss_methods_f2.values.tolist()
+        
+        # Couleurs pour les méthodes de victoire/défaite
+        victory_colors = {
+            'TKO': '#264653',  # Rouge pour TKO
+            'SUB': '#2A9D8F',  # Bleu pour soumission
+            'DEC': '#E9C46A',  # Vert pour décision
+            }
+        
+        # Pour assurer que toutes les méthodes ont une couleur
+        all_methods = set(
+            win_methods_f1_labels + loss_methods_f1_labels +
+            win_methods_f2_labels + loss_methods_f2_labels
+        )
+        
+        # Couleurs par défaut pour les méthodes non listées
+        colors = ['#FF4136', '#FF851B', '#0074D9', '#2ECC40', '#AAAAAA', '#B10DC9', '#FF6EFF', '#FFDC00']
+        method_colors = {method: victory_colors.get(method, colors[i % len(colors)]) 
+                        for i, method in enumerate(all_methods)}
+        
+        # Ajouter les camemberts
+        # Victoires Fighter 1 [0][0]
+        fig.add_trace(
+            go.Pie(
+                labels=win_methods_f1_labels, 
+                values=win_methods_f1_values,
+                name=f"{fighter1_name} Wins",
+                marker=dict(colors=[method_colors[method] for method in win_methods_f1_labels]),
+                textinfo='label+percent',
+                hoverinfo='label+value+percent',
+                textfont_size=12,
+                hole=.3,
+            ),
+            row=1, col=1
+        )
+        
+        # Victoires Fighter 2 [0][1]
+        fig.add_trace(
+            go.Pie(
+                labels=win_methods_f2_labels, 
+                values=win_methods_f2_values,
+                name=f"{fighter2_name} Wins",
+                marker=dict(colors=[method_colors[method] for method in win_methods_f2_labels]),
+                textinfo='label+percent',
+                hoverinfo='label+value+percent',
+                textfont_size=12,
+                hole=.3,
+            ),
+            row=1, col=2
+        )
+        
+        # Défaites Fighter 1 [1][0]
+        fig.add_trace(
+            go.Pie(
+                labels=loss_methods_f1_labels, 
+                values=loss_methods_f1_values,
+                name=f"{fighter1_name} Losses",
+                marker=dict(colors=[method_colors[method] for method in loss_methods_f1_labels]),
+                textinfo='label+percent',
+                hoverinfo='label+value+percent',
+                textfont_size=12,
+                hole=.3,
+            ),
+            row=2, col=1
+        )
+        
+        # Défaites Fighter 2 [1][1]
+        fig.add_trace(
+            go.Pie(
+                labels=loss_methods_f2_labels, 
+                values=loss_methods_f2_values,
+                name=f"{fighter2_name} Losses",
+                marker=dict(colors=[method_colors[method] for method in loss_methods_f2_labels]),
+                textinfo='label+percent',
+                hoverinfo='label+value+percent',
+                textfont_size=12,
+                hole=.3,
+            ),
+            row=2, col=2
+        )
+        
+        # Mise à jour de la mise en page
+        fig.update_layout(
+            title={
+                'text': f"Victory & Defeat Methods: {fighter1_name} vs {fighter2_name}",
+                'x': 0.5,
+                'xanchor': 'center',
+                'yanchor': 'top',
+                'font': {'size': 22}
+            },
+            # Ajuster les annotations (titres des sous-graphiques)
+            annotations=[
+                dict(x=0.25, y=0.995, showarrow=False, text=f"{fighter1_name} Victories", font_size=16),
+                dict(x=0.75, y=0.995, showarrow=False, text=f"{fighter2_name} Victories", font_size=16),
+                dict(x=0.25, y=0.475, showarrow=False, text=f"{fighter1_name} Defeats", font_size=16),
+                dict(x=0.75, y=0.475, showarrow=False, text=f"{fighter2_name} Defeats", font_size=16)
+            ],
+            height=800,  # Hauteur en pixels
+            width=1000,  # Largeur en pixels
+            showlegend=False,  # Masquer la légende globale car les étiquettes sont sur les camemberts
+        )
+        
+        # Ajouter une annotation pour indiquer les couleurs des méthodes
+        method_colors_list = list(method_colors.items())
+        for i, (method, color) in enumerate(method_colors_list):
+            fig.add_annotation(
+                x=1.1,  # Position horizontale (à droite du graphique)
+                y=0.5 - i * 0.1,  # Position verticale
+                xref="paper",
+                yref="paper",
+                text=f"{method}",
+                showarrow=False,
+                font=dict(color=color, size=12),
+                align="left"
+            )
+        
+        return fig
+
+    fig = create_victory_defeat_pie_charts(df_tapology_1, df_tapology_2, df_fights_1, df_fights_2)
+    st.plotly_chart(fig, use_container_width=True)
+
     # Fighter's Ranking evolution graph
     def Graph_Fighter_Ranking_Evolution(df_ranking_history):
 
@@ -489,13 +736,21 @@ if compare_button:
                             for index, row in df_ranking_hist_temp.iterrows()]
             ))
             
-        fig.update_layout(
-            title="Fighters Ranking Evolution",
-            xaxis_title="Date",
-            yaxis_title="Ranking",
-            yaxis=dict(autorange="reversed"),  # Lower rank number is better
-            legend_title="Fighter",
-            hovermode="closest")
+            fig.update_layout(
+                title={'text' : "Fighters Ranking Evolution",
+                    'x' : 0.5,
+                    'xanchor': 'center',
+                    'yanchor': 'top'},
+                xaxis_title="Date",
+                yaxis_title="Ranking",
+                yaxis=dict(autorange="reversed"),  # Lower rank number is better
+                legend = {'yanchor' : 'bottom',
+                        'y' : -0.2,
+                        'xanchor' : 'left',
+                        'x' : 0,
+                        'orientation' : 'h'
+                        },
+                hovermode="closest")
         return fig
     
     graph_rank_evolution = Graph_Fighter_Ranking_Evolution(df_ranking_history)
@@ -561,11 +816,19 @@ if compare_button:
 
         # --- Customize Layout ---
         fig.update_layout(
-            title="Opponent Ranking at Time of Fight",
+            title={'text' : "Opponent Ranking at Time of Fight",
+                   "xanchor": 'center',
+                   "yanchor": 'top',
+                   "x": 0.5},
             xaxis_title="Date of Fight",
             yaxis_title="Opponent Ranking",
             yaxis=dict(autorange="reversed"),  # Lower rank number is better
-            legend_title="Fighter",
+            legend = {'yanchor' : 'bottom',
+                    'y' : -0.2,
+                    'xanchor' : 'left',
+                    'x' : 0,
+                    'orientation' : 'h'
+                    },
             hovermode="closest")
         
         return fig
@@ -574,10 +837,86 @@ if compare_button:
     st.plotly_chart(graph_opp_rank, use_container_width=True)
 
     # Opponents cumulated record bar chart avec hue sur Result Win/Lose/Draw 
-    def Graph_Opponent_cumulated_Record():
+
+    def create_opponent_stats_comparison(df_tapology1, df_tapology2, df_fights1, df_fights2):
+        # Calculer les sommes pour chaque combattant
+        sum_f1 = df_tapology1[['Opponent Win', 'Opponent Lose', 'Opponent draw']].sum()
+        sum_f2 = df_tapology2[['Opponent Win', 'Opponent Lose', 'Opponent draw']].sum()
+
+        fighter1_name = df_fights1['Fighter Name'].unique()[0]
+        fighter2_name = df_fights2['Fighter Name'].unique()[0]
+
+        # Créer la figure
         fig = go.Figure()
-        fig.add
+        
+        # Catégories
+        categories = ['Opponent Win', 'Opponent Lose', 'Opponent Draw']
+        
+        # Positions des barres sur l'axe x
+        x_positions = np.arange(len(categories))
+        bar_width = 0.35
+        
+        # Ajouter les barres pour Fighter 1
+        fig.add_trace(go.Bar(
+            x=x_positions - bar_width/2,
+            y=[sum_f1['Opponent Win'], sum_f1['Opponent Lose'], sum_f1['Opponent draw']],
+            width=bar_width,
+            name=fighter1_name,
+            marker_color='red',
+            text=[int(sum_f1['Opponent Win']), int(sum_f1['Opponent Lose']), int(sum_f1['Opponent draw'])],
+            textposition='auto'
+        ))
+        
+        # Ajouter les barres pour Fighter 2
+        fig.add_trace(go.Bar(
+            x=x_positions + bar_width/2,
+            y=[sum_f2['Opponent Win'], sum_f2['Opponent Lose'], sum_f2['Opponent draw']],
+            width=bar_width,
+            name=fighter2_name,
+            marker_color='blue',
+            text=[int(sum_f2['Opponent Win']), int(sum_f2['Opponent Lose']), int(sum_f2['Opponent draw'])],
+            textposition='auto'
+        ))
+        
+        # Mise en page
+        fig.update_layout(
+            title={
+                'text': "Opponent Records Comparison",
+                'x': 0.5,
+                'xanchor': 'center',
+                'yanchor': 'top'
+            },
+            xaxis=dict(
+                tickmode='array',
+                tickvals=x_positions,
+                ticktext=categories,
+                title=""
+            ),
+            yaxis=dict(
+                title="Sum"
+            ),
+            legend={
+                'orientation': 'h',
+                'yanchor': 'bottom',
+                'y': -0.2,
+                'xanchor': 'left',
+                'x': 0
+            },
+            barmode='group'
+        )
+        
         return fig
+
+    # Utilisation
+    fig = create_opponent_stats_comparison(df_tapology_1, df_tapology_2, df_fights_1, df_fights_2)
+    st.plotly_chart(fig, use_container_width=True)
     
-    graph_opp_cumul_record = Graph_Opponent_cumulated_Record()
-    st.plotly_chart(graph_opp_cumul_record, use_container_width=True)
+    # graph_opp_cumul_record = Graph_Opponent_cumulated_Record()
+    # st.plotly_chart(graph_opp_cumul_record, use_container_width=True)
+
+
+    #TEMP affiche les dataframes pour une meilleure lecture pendant la rédaction du code
+    # st.dataframe(df_fights)
+    # st.dataframe(df_ranking_history)
+    # st.dataframe(fighter_info_1)
+    # st.dataframe(df_tapology)
