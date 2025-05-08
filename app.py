@@ -854,13 +854,50 @@ if compare_button:
     # Utilisation
     fig = create_opponent_stats_comparison(df_tapology_1, df_tapology_2, df_fights_1, df_fights_2)
     st.plotly_chart(fig, use_container_width=True)
-    
-    # graph_opp_cumul_record = Graph_Opponent_cumulated_Record()
-    # st.plotly_chart(graph_opp_cumul_record, use_container_width=True)
 
+st.markdown("""
+<style>
+.tooltip-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 22px;
+  color: #666;
+  cursor: pointer;
+  z-index: 1000;
+}
 
-    #TEMP affiche les dataframes pour une meilleure lecture pendant la rédaction du code
-    # st.dataframe(df_fights)
-    # st.dataframe(df_ranking_history)
-    # st.dataframe(fighter_info_1)
-    # st.dataframe(df_tapology)
+.tooltip-icon .tooltiptext {
+  visibility: hidden;
+  width: 340px;
+  background-color: #fefefe;
+  color: #333;
+  text-align: left;
+  border-radius: 8px;
+  padding: 14px;
+  position: absolute;
+  bottom: 125%;
+  right: 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  font-size: 13px;
+}
+
+.tooltip-icon:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+</style>
+
+<div class="tooltip-icon">ℹ️
+  <div class="tooltiptext">
+    This application is developed strictly for educational and non-commercial purposes.<br><br>
+    It does not collect, store, or share any personal user data. No cookies or analytics are used.<br><br>
+    All data shown is from public sources (e.g., FightMatrix, Tapology) and is used for learning only.<br><br>
+    The developer claims no ownership of third-party data or trademarks.<br><br>
+    Provided “as is”, without warranties. Contact via GitHub for removal requests.
+  </div>
+</div>
+""", unsafe_allow_html=True)
+
