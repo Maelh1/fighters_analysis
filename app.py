@@ -860,7 +860,7 @@ st.markdown("""
 .tooltip-icon {
   position: fixed;
   bottom: 20px;
-  right: 20px;
+  left: 20px;
   font-size: 22px;
   color: #666;
   cursor: pointer;
