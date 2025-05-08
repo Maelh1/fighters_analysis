@@ -877,7 +877,7 @@ st.markdown("""
   padding: 14px;
   position: absolute;
   bottom: 125%;
-  right: 0;
+  left: 30px; 
   opacity: 0;
   transition: opacity 0.3s;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
