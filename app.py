@@ -315,19 +315,19 @@ fighters_list_df = pd.read_csv('data/fighters_list.csv')
 fighters_list_df = fighters_list_df.drop_duplicates()
 to_dict = fighters_list_df.to_dict('list')
 name_link_dict = {name: link for name, link in zip(fighters_list_df['names'], fighters_list_df['links'])}
-fighter_propositions = ["URL Fightmatrix"] + fighters_list_df['names'].tolist()
+fighter_propositions = ["Fightmatrix URL"] + fighters_list_df['names'].tolist()
 
 with left_col:
-    fighter1_selectbox = st.selectbox("Fighter 1", fighter_propositions)
-    if fighter1_selectbox == "URL Fightmatrix":
-        fighter1_url = st.text_input("Enter the 1st fighter's link")
+    fighter1_selectbox = st.selectbox("Choose fighter 1", fighter_propositions)
+    if fighter1_selectbox == "Fightmatrix URL":
+        fighter1_url = st.text_input("...or go to Fightmatrix.com and copy-paste the 1st fighter's page link")
     else:
         fighter1_url =  "https://www.fightmatrix.com"+name_link_dict[fighter1_selectbox]
 
 with right_col:
-    fighter2_selectbox = st.selectbox("Fighter 2", fighter_propositions)
-    if fighter2_selectbox == "URL Fightmatrix":
-        fighter2_url = st.text_input("Enter the 2nd fighter's link")
+    fighter2_selectbox = st.selectbox("Choose fighter 2", fighter_propositions)
+    if fighter2_selectbox == "Fightmatrix URL":
+        fighter2_url = st.text_input("...or go to Fightmatrix.com and copy-paste the 2nd fighter's page link")
     else:
         fighter2_url = "https://www.fightmatrix.com"+name_link_dict[fighter2_selectbox]
 
