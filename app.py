@@ -315,19 +315,140 @@ fighters_list_df = pd.read_csv('data/fighters_list.csv')
 fighters_list_df = fighters_list_df.drop_duplicates()
 to_dict = fighters_list_df.to_dict('list')
 name_link_dict = {name: link for name, link in zip(fighters_list_df['names'], fighters_list_df['links'])}
-fighter_propositions = ["Fightmatrix URL"] + fighters_list_df['names'].tolist()
+fighter_propositions = ["URL Fightmatrix"] + fighters_list_df['names'].tolist()
 
 with left_col:
-    fighter1_selectbox = st.selectbox("Choose fighter 1", fighter_propositions)
-    if fighter1_selectbox == "Fightmatrix URL":
-        fighter1_url = st.text_input("...or go to Fightmatrix.com and copy-paste the 1st fighter's page link")
+    fighter1_selectbox = st.selectbox("Select fighter 1", fighter_propositions)
+    if fighter1_selectbox == "URL Fightmatrix":
+        st.markdown("""
+        <style>
+        .info-tooltip {
+        display: inline-block;
+        position: relative;
+        font-size: 16px;
+        margin-left: 6px;
+        color: #888;
+        cursor: pointer;
+        }
+
+        .info-tooltip .video-popup {
+        visibility: hidden;
+        width: 900px;
+        position: absolute;
+        top: 200%;
+        left: -10px;
+        z-index: 1000;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        transition: opacity 0.3s;
+        opacity: 0;
+        }
+
+        .info-tooltip:hover .video-popup {
+        visibility: visible;
+        opacity: 1;
+    
+
+        video {
+        width: 100%;
+        height: auto;
+        pointer-events: none;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        st.markdown("""
+        <label for="fighter_input">
+        Or paste their fightmatrix page url
+        <span class="info-tooltip">💡
+            <span class="video-popup">
+            <video autoplay muted loop>
+                <source src="https://raw.githubusercontent.com/Maelh1/fighters_analysis/main/video/tuto.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            </span>
+        </span>
+        </label>
+        """, unsafe_allow_html=True)
+
+        fighter1_url = st.text_input("",key="fighter_input")
     else:
         fighter1_url =  "https://www.fightmatrix.com"+name_link_dict[fighter1_selectbox]
 
 with right_col:
-    fighter2_selectbox = st.selectbox("Choose fighter 2", fighter_propositions)
-    if fighter2_selectbox == "Fightmatrix URL":
-        fighter2_url = st.text_input("...or go to Fightmatrix.com and copy-paste the 2nd fighter's page link")
+    fighter2_selectbox = st.selectbox("Select fighter 2", fighter_propositions)
+    if fighter2_selectbox == "URL Fightmatrix":
+        st.markdown("""
+        <style>
+        .info-tooltip {
+        display: inline-block;
+        position: relative;
+        font-size: 16px;
+        margin-left: 6px;
+        color: #888;
+        cursor: pointer;
+        }
+
+        .info-tooltip .video-popup {
+        visibility: hidden;
+        width: 600px;
+        position: absolute;
+        top: 100%;
+        left: -10px;
+        z-index: 1000;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        transition: opacity 0.3s;
+        opacity: 0;
+        }
+
+        .info-tooltip:hover .video-popup {
+        visibility: visible;
+        opacity: 1;
+        }
+        #video-container {
+        position: relative;
+        display: inline-block;
+        }
+
+        #tooltip-video {
+        display: none;
+        position: absolute;
+        left: 100%;
+        top: -20px;
+        z-index: 10;
+        width: 300px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        overflow: hidden;
+        }
+
+        #video-container:hover #tooltip-video {
+        display: block;
+        }
+
+        video {
+        width: 100%;
+        height: auto;
+        pointer-events: none;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+        st.markdown("""
+        <label for="fighter_input">
+        Or paste their fightmatrix page url
+        <span class="info-tooltip">💡
+            <span class="video-popup">
+            <video width="100%" autoplay muted loop>
+                <source src="https://raw.githubusercontent.com/Maelh1/fighters_analysis/main/video/tuto.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            </span>
+        </span>
+        </label>
+        """, unsafe_allow_html=True)
+        fighter2_url = st.text_input("")
     else:
         fighter2_url = "https://www.fightmatrix.com"+name_link_dict[fighter2_selectbox]
 
@@ -854,13 +975,14 @@ if compare_button:
     # Utilisation
     fig = create_opponent_stats_comparison(df_tapology_1, df_tapology_2, df_fights_1, df_fights_2)
     st.plotly_chart(fig, use_container_width=True)
+    
 
 st.markdown("""
 <style>
 .tooltip-icon {
   position: fixed;
   bottom: 20px;
-  left: 20px;
+  right: 20px;
   font-size: 22px;
   color: #666;
   cursor: pointer;
@@ -877,7 +999,7 @@ st.markdown("""
   padding: 14px;
   position: absolute;
   bottom: 125%;
-  left: 30px; 
+  right: 0;
   opacity: 0;
   transition: opacity 0.3s;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -901,3 +1023,9 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+
+    #TEMP affiche les dataframes pour une meilleure lecture pendant la rédaction du code
+    # st.dataframe(df_fights)
+    # st.dataframe(df_ranking_history)
+    # st.dataframe(fighter_info_1)
+    # st.dataframe(df_tapology)
