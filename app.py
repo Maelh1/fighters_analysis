@@ -169,14 +169,20 @@ def retrieve_fighter_info(soup_tapology,soup_fightmatrix):
     fighter_info["Name"] = name
 
     today=datetime.now()
-    fighter_birthday = soup_tapology.find("span", attrs={"data-controller":"age-calc"})
-    fighter_birthday = fighter_birthday.text if fighter_birthday else np.nan
-    fighter_birthday = datetime.strptime(str(fighter_birthday), '%Y-%m-%d')
-    fighter_info["Birthday"] = fighter_birthday
-
-    fighter_age = today.year - fighter_birthday.year - ((today.month, today.day) < (fighter_birthday.month, fighter_birthday.day))
-    fighter_info["Age"] = fighter_age
-
+    try:
+        fighter_birthday = soup_tapology.find("span", attrs={"data-controller":"age-calc"})
+        fighter_birthday = fighter_birthday.text if fighter_birthday else np.nan
+        fighter_birthday = datetime.strptime(str(fighter_birthday), '%Y-%m-%d')
+        fighter_info["Birthday"] = fighter_birthday
+    except:
+        fighter_info["Birthday"] = np.nan
+        
+    try:    
+        fighter_age = today.year - fighter_birthday.year - ((today.month, today.day) < (fighter_birthday.month, fighter_birthday.day))
+        fighter_info["Age"] = fighter_age
+    except:
+        fighter_info["Age"] = np.nan
+        
     record_div = soup_fightmatrix.find_all(string=re.compile('Pro Record: '))
     record = [record.parent for record in record_div]
     record=record[0].find("strong").text
