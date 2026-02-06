@@ -10,107 +10,6 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit.components.v1 as components
 
-st.set_page_config(
-    page_title="MMA Fighters Analysis",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
-
-
-components.html("""
-<style>
-
-/* Main header */
-#mma-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 64px;
-    background: #0e1117;
-    color: white;
-    padding: 10px 24px;
-    z-index: 10000;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-
-    transition: transform 0.3s ease;
-}
-
-/* Hidden */
-#mma-header.hidden {
-    transform: translateY(-100%);
-}
-
-/* Title */
-#mma-header h1 {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 600;
-}
-
-/* Subtitle */
-#mma-header p {
-    margin: 0;
-    font-size: 12px;
-    opacity: 0.8;
-}
-
-/* Links */
-#mma-header a {
-    color: #4fc3f7;
-    text-decoration: none;
-}
-
-#mma-header a:hover {
-    text-decoration: underline;
-}
-
-/* Push Streamlit content */
-main {
-    padding-top: 70px !important;
-}
-
-</style>
-
-<div id="mma-header">
-    <h1>Analyze and compare MMA fighters</h1>
-    <p>
-        Thank you to
-        <a href="https://www.fightmatrix.com" target="_blank">FightMatrix</a>
-        and
-        <a href="https://www.tapology.com" target="_blank">Tapology</a>
-    </p>
-</div>
-
-<script>
-
-let lastScroll = 0;
-const header = document.getElementById("mma-header");
-
-window.addEventListener("scroll", () => {
-
-    const current = window.pageYOffset;
-
-    if (current > lastScroll && current > 80) {
-        header.classList.add("hidden");
-    } 
-    else {
-        header.classList.remove("hidden");
-    }
-
-    lastScroll = current;
-});
-
-</script>
-""",
-height=0,
-)
-
 
 # Get tapology URL and soup_fightmatrix
 def get_tapology_url(url):
@@ -411,6 +310,102 @@ def fights_analysis(func_fights_df,func_ranking_history_df):
 # _________________________ DATA VISUALISATION STREAMLIT _________________________
 
 # __________Header__________
+
+st.set_page_config(
+    page_title="MMA Fighters Analysis",
+    layout="wide"
+)
+
+st.markdown("""
+<style>
+
+/* Hide default header */
+header[data-testid="stHeader"] {
+    display: none;
+}
+
+/* Custom header */
+#mma-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 64px;
+    background: #0e1117;
+    color: white;
+    padding: 10px 24px;
+    z-index: 999999;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+
+    transition: transform 0.3s ease;
+}
+
+/* Hidden */
+#mma-header.hidden {
+    transform: translateY(-100%);
+}
+
+#mma-header h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#mma-header p {
+    margin: 0;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+#mma-header a {
+    color: #4fc3f7;
+    text-decoration: none;
+}
+
+#mma-header a:hover {
+    text-decoration: underline;
+}
+
+/* Push content */
+section.main > div {
+    padding-top: 70px !important;
+}
+
+</style>
+
+<div id="mma-header">
+    <h1>Analyze and compare MMA fighters</h1>
+    <p>
+        Thank you to
+        <a href="https://www.fightmatrix.com" target="_blank">FightMatrix</a>
+        and
+        <a href="https://www.tapology.com" target="_blank">Tapology</a>
+    </p>
+</div>
+
+<script>
+let lastScroll = 0;
+const header = document.getElementById("mma-header");
+
+window.addEventListener("scroll", () => {
+
+    const current = window.pageYOffset;
+
+    if (current > lastScroll && current > 80) {
+        header.classList.add("hidden");
+    } else {
+        header.classList.remove("hidden");
+    }
+
+    lastScroll = current;
+});
+</script>
+""", unsafe_allow_html=True)
 
 #Fighter selection
 left_col,right_col =st.columns(2)
@@ -1135,6 +1130,7 @@ st.markdown("""
     # st.dataframe(df_ranking_history)
     # st.dataframe(fighter_info_1)
     # st.dataframe(df_tapology)
+
 
 
 
