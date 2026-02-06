@@ -310,6 +310,7 @@ def fights_analysis(func_fights_df,func_ranking_history_df):
 # _________________________ DATA VISUALISATION STREAMLIT _________________________
 
 # __________Header__________
+import streamlit as st
 
 st.set_page_config(
     page_title="MMA Fighters Analysis",
@@ -319,7 +320,7 @@ st.set_page_config(
 st.markdown("""
 <style>
 
-/* Hide default Streamlit header */
+/* Hide default header */
 header[data-testid="stHeader"] {
     display: none;
 }
@@ -330,80 +331,62 @@ header[data-testid="stHeader"] {
     top: 0;
     left: 0;
     width: 100%;
-    height: 64px;
-
+    height: 96px;
     background: linear-gradient(90deg, #f4f6f8, #e9edf2);
     color: #1f2933;
-
-    padding: 0 32px;
+    padding: 10px 24px;
     z-index: 999999;
 
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 
     transition: transform 0.3s ease;
 }
 
-/* Hidden on scroll */
+/* Hidden */
 #mma-header.hidden {
     transform: translateY(-100%);
 }
 
-/* Title centered */
-#mma-title {
-    grid-column: 2;
-    text-align: center;
-
+#mma-header h1 {
+    margin: 0;
     font-size: 20px;
     font-weight: 600;
-    letter-spacing: 0.3px;
 }
 
-/* Credits right */
-#mma-credits {
-    grid-column: 3;
-    text-align: right;
-
+#mma-header p {
+    margin: 0;
     font-size: 12px;
-    color: #4b5563;
+    opacity: 0.8;
 }
 
-/* Links */
-#mma-credits a {
-    color: #2563eb;
+#mma-header a {
+    color: #4fc3f7;
     text-decoration: none;
-    font-weight: 500;
 }
 
-#mma-credits a:hover {
+#mma-header a:hover {
     text-decoration: underline;
 }
 
-/* Push content down */
+/* Push content */
 section.main > div {
-    padding-top: 75px !important;
+    padding-top: 70px !important;
 }
 
 </style>
 
 <div id="mma-header">
-
-    <div></div>
-
-    <div id="mma-title">
-        Analyze and compare MMA Fighters
-    </div>
-
-    <div id="mma-credits">
+    <h1>Analyze and compare MMA fighters</h1>
+    <p>
         Thank you to
-        <a href="https://www.tapology.com" target="_blank">Tapology</a>
-        and
         <a href="https://www.fightmatrix.com" target="_blank">FightMatrix</a>
-    </div>
-
+        and
+        <a href="https://www.tapology.com" target="_blank">Tapology</a>
+    </p>
 </div>
 
 <script>
@@ -424,6 +407,7 @@ window.addEventListener("scroll", () => {
 });
 </script>
 """, unsafe_allow_html=True)
+
 
 #Fighter selection
 left_col,right_col =st.columns(2)
@@ -1149,6 +1133,7 @@ st.markdown("""
     # st.dataframe(df_ranking_history)
     # st.dataframe(fighter_info_1)
     # st.dataframe(df_tapology)
+
 
 
 
