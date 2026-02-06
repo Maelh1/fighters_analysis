@@ -330,8 +330,8 @@ header[data-testid="stHeader"] {
     top: 0;
     left: 0;
     width: 100%;
-    height: 64px;
-    background: #0e1117;
+    height: 128px;
+    background: #0f04b0;
     color: white;
     padding: 10px 24px;
     z-index: 999999;
@@ -1130,6 +1130,7 @@ st.markdown("""
     # st.dataframe(df_ranking_history)
     # st.dataframe(fighter_info_1)
     # st.dataframe(df_tapology)
+
 
 
 
