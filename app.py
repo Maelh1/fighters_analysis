@@ -1086,7 +1086,7 @@ st.markdown("""
 .tooltip-icon {
   position: fixed;
   bottom: 20px;
-  right: 20px;
+  left: 20px;
   font-size: 22px;
   color: #666;
   cursor: pointer;
@@ -1133,6 +1133,7 @@ st.markdown("""
     # st.dataframe(df_ranking_history)
     # st.dataframe(fighter_info_1)
     # st.dataframe(df_tapology)
+
 
 
 
