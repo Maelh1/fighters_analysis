@@ -10,6 +10,13 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit.components.v1 as components
 
+st.set_page_config(
+    page_title="MMA Fighters Analysis",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+
 components.html("""
 <style>
 
@@ -404,8 +411,6 @@ def fights_analysis(func_fights_df,func_ranking_history_df):
 # _________________________ DATA VISUALISATION STREAMLIT _________________________
 
 # __________Header__________
-
-st.set_page_config(page_title='Fighters comparison', layout='centered', page_icon=':chart_with_upwards_trend:')
 
 #Fighter selection
 left_col,right_col =st.columns(2)
@@ -1130,6 +1135,7 @@ st.markdown("""
     # st.dataframe(df_ranking_history)
     # st.dataframe(fighter_info_1)
     # st.dataframe(df_tapology)
+
 
 
 
