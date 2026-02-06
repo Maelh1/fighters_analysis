@@ -425,7 +425,12 @@ window.addEventListener("scroll", () => {
 </script>
 """, unsafe_allow_html=True)
 
+#Fighter selection
+left_col,right_col =st.columns(2)
+fighters_names_url_dict={"Benoît St. Denis":'https://www.fightmatrix.com/fighter-profile/Benoit+St.+Denis/205208/',"Joel Alvarez":'https://www.fightmatrix.com/fighter-profile/Joel+Alvarez/143278/'}
+dict_url_to_df = {} #Temp test pas encore fonctionnel
 
+fighters_list_df = pd.read_csv('data/fighters_list.csv')
 
 fighters_list_df = fighters_list_df.drop_duplicates()
 to_dict = fighters_list_df.to_dict('list')
@@ -1144,6 +1149,7 @@ st.markdown("""
     # st.dataframe(df_ranking_history)
     # st.dataframe(fighter_info_1)
     # st.dataframe(df_tapology)
+
 
 
 
