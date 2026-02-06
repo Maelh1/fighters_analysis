@@ -9,6 +9,87 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
+# Header
+st.markdown("""
+<style>
+
+/* Header container */
+#mma-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #0e1117;
+    color: white;
+    padding: 12px 20px;
+    z-index: 9999;
+    transition: transform 0.3s ease-in-out;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* Hidden state */
+#mma-header.hidden {
+    transform: translateY(-100%);
+}
+
+/* Title */
+#mma-header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+/* Subtitle */
+#mma-header p {
+    margin: 2px 0 0;
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+/* Links */
+#mma-header a {
+    color: #4fc3f7;
+    text-decoration: none;
+}
+
+#mma-header a:hover {
+    text-decoration: underline;
+}
+
+/* Push content down */
+.stApp {
+    padding-top: 70px;
+}
+
+</style>
+
+<div id="mma-header">
+    <h1>Analyze and compare MMA fighters</h1>
+    <p>
+        Thank you to
+        <a href="https://www.fightmatrix.com" target="_blank">FightMatrix</a>
+        and
+        <a href="https://www.tapology.com" target="_blank">Tapology</a>
+    </p>
+</div>
+
+<script>
+let lastScroll = 0;
+const header = document.getElementById("mma-header");
+
+window.addEventListener("scroll", () => {
+    const currentScroll = window.pageYOffset;
+
+    if (currentScroll > lastScroll && currentScroll > 80) {
+        header.classList.add("hidden");
+    } else {
+        header.classList.remove("hidden");
+    }
+
+    lastScroll = currentScroll;
+});
+</script>
+""", unsafe_allow_html=True)
+
 
 # Get tapology URL and soup_fightmatrix
 def get_tapology_url(url):
@@ -1035,3 +1116,4 @@ st.markdown("""
     # st.dataframe(df_ranking_history)
     # st.dataframe(fighter_info_1)
     # st.dataframe(df_tapology)
+
