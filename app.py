@@ -8,12 +8,13 @@ import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import streamlit.components.v1 as components
 
-# Header
-st.markdown("""
+#header
+components.html(
+"""
 <style>
 
-/* Header container */
 #mma-header {
     position: fixed;
     top: 0;
@@ -25,27 +26,24 @@ st.markdown("""
     z-index: 9999;
     transition: transform 0.3s ease-in-out;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    font-family: sans-serif;
 }
 
-/* Hidden state */
 #mma-header.hidden {
     transform: translateY(-100%);
 }
 
-/* Title */
 #mma-header h1 {
     margin: 0;
     font-size: 22px;
 }
 
-/* Subtitle */
 #mma-header p {
     margin: 2px 0 0;
     font-size: 13px;
     opacity: 0.8;
 }
 
-/* Links */
 #mma-header a {
     color: #4fc3f7;
     text-decoration: none;
@@ -55,8 +53,7 @@ st.markdown("""
     text-decoration: underline;
 }
 
-/* Push content down */
-.stApp {
+body {
     padding-top: 70px;
 }
 
@@ -88,7 +85,9 @@ window.addEventListener("scroll", () => {
     lastScroll = currentScroll;
 });
 </script>
-""", unsafe_allow_html=True)
+""",
+height=0,
+)
 
 
 # Get tapology URL and soup_fightmatrix
@@ -1116,4 +1115,5 @@ st.markdown("""
     # st.dataframe(df_ranking_history)
     # st.dataframe(fighter_info_1)
     # st.dataframe(df_tapology)
+
 
